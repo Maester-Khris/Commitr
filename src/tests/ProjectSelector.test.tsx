@@ -8,22 +8,24 @@ const projects: Project[] = [
   { id: '2', name: 'Deep Work', color: '#22C55E', createdAt: '2024-01-01T00:00:00Z' },
 ]
 
+function openDropdown() {
+  // Click the main selector button to open the dropdown
+  fireEvent.click(screen.getAllByRole('button')[0])
+}
+
 describe('ProjectSelector', () => {
   it('calls onSelect with the correct id when a project is clicked', () => {
     const onSelect = vi.fn()
-    const onOpenChange = vi.fn()
-
     render(
       <ProjectSelector
         projects={projects}
         activeProjectId="1"
-        isOpen={true}
-        onOpenChange={onOpenChange}
         onSelect={onSelect}
         onAdd={vi.fn()}
       />
     )
 
+    openDropdown()
     fireEvent.click(screen.getByText('Deep Work'))
 
     expect(onSelect).toHaveBeenCalledWith('2')
@@ -35,24 +37,22 @@ describe('ProjectSelector', () => {
       <ProjectSelector
         projects={projects}
         activeProjectId="1"
-        isOpen={true}
-        onOpenChange={vi.fn()}
         onSelect={vi.fn()}
         onAdd={vi.fn()}
       />
     )
 
+    openDropdown()
+
     expect(screen.getByText('Deep Work')).toBeInTheDocument()
     expect(screen.getAllByText('Commitr').length).toBeGreaterThanOrEqual(1)
   })
 
-  it('hides the dropdown when closed', () => {
+  it('hides the dropdown by default', () => {
     render(
       <ProjectSelector
         projects={projects}
         activeProjectId="1"
-        isOpen={false}
-        onOpenChange={vi.fn()}
         onSelect={vi.fn()}
         onAdd={vi.fn()}
       />
