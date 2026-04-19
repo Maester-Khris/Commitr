@@ -16,23 +16,34 @@ export default function PlayerButton({ isRunning, secondsRemaining, projectColor
     <div className="flex items-center justify-center">
       <button
         onClick={onToggle}
-        className="w-36 h-36 md:w-44 md:h-44 rounded-full border-2 border-gray-700 bg-gray-900 hover:bg-gray-800 transition-all flex flex-col items-center justify-center gap-1 focus:outline-none"
+        className="w-48 h-48 md:w-56 md:h-56 rounded-full border-2 transition-all duration-500 flex flex-col items-center justify-center gap-2 focus:outline-none relative group overflow-hidden"
         style={isRunning ? {
           borderColor: projectColor,
-          boxShadow: `0 0 20px 4px ${projectColor}40`,
-        } : undefined}
+          backgroundColor: `${projectColor}10`,
+          boxShadow: `0 0 40px 10px ${projectColor}20`,
+        } : {
+          borderColor: '#26292F',
+          backgroundColor: '#16191D',
+        }}
       >
+        {!isRunning && (
+          <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        )}
+        
         {isRunning ? (
           <>
-            <span className="text-2xl md:text-3xl font-mono font-semibold tabular-nums">
+            <span className="text-4xl md:text-5xl font-bold tracking-tight text-white tabular-nums">
               {formatTime(secondsRemaining)}
             </span>
-            <span className="text-xs text-gray-500">remaining</span>
+            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500">remaining</span>
           </>
         ) : (
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor" className="text-gray-300 ml-1">
-            <polygon points="5,3 19,12 5,21" />
-          </svg>
+          <div className="flex flex-col items-center gap-3">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor" className="text-white transition-transform duration-300 group-hover:scale-110 ml-1">
+              <path d="M8 5v14l11-7z" />
+            </svg>
+            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500 group-hover:text-slate-300 transition-colors">Start Session</span>
+          </div>
         )}
       </button>
     </div>

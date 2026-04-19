@@ -36,11 +36,11 @@ export default function HomePage({
   const activeProject = projects.find(p => p.id === activeProjectId)
 
   return (
-    <main className="flex-1 flex items-center justify-center w-full min-h-0 p-6">
-      <div className={`flex flex-col md:flex-row items-center justify-center transition-all duration-500 ease-in-out ${showAddPanel ? 'gap-12 md:gap-20' : 'gap-0'}`}>
+    <main className="flex-1 flex flex-col items-center justify-center w-full min-h-[90vh] bg-[#0F1115] p-8 text-slate-200">
+      <div className={`flex flex-col md:flex-row items-center justify-center transition-all duration-700 ease-in-out ${showAddPanel ? 'gap-16 md:gap-32' : 'gap-0'}`}>
 
         {/* Left Section: Timer & Controls */}
-        <div className="flex flex-col items-center gap-6 w-full max-w-[320px]">
+        <div className="flex flex-col items-center gap-10 w-full max-w-[340px]">
           <PlayerButton
             isRunning={activeTimer?.isRunning ?? false}
             secondsRemaining={activeTimer?.secondsRemaining ?? 1500}
@@ -48,32 +48,34 @@ export default function HomePage({
             onToggle={onTimerToggle}
           />
 
-          {activeTimer?.isPaused ? (
-            <ResetTimerPrompt
-              secondsRemaining={activeTimer.secondsRemaining}
-              projectName={activeProject?.name ?? ''}
-              onResume={onTimerToggle}
-              onReset={onTimerReset}
-            />
-          ) : (
-            <SessionStatus
-              isRunning={activeTimer?.isRunning ?? false}
-              projectName={activeProject?.name ?? ''}
-              totalSecondsToday={activeTimer?.totalSecondsToday ?? 0}
-            />
-          )}
+          <div className="w-full flex flex-col items-center gap-8">
+            {activeTimer?.isPaused ? (
+              <ResetTimerPrompt
+                secondsRemaining={activeTimer.secondsRemaining}
+                projectName={activeProject?.name ?? ''}
+                onResume={onTimerToggle}
+                onReset={onTimerReset}
+              />
+            ) : (
+              <SessionStatus
+                isRunning={activeTimer?.isRunning ?? false}
+                projectName={activeProject?.name ?? ''}
+                totalSecondsToday={activeTimer?.totalSecondsToday ?? 0}
+              />
+            )}
 
-          <ProjectSelector
-            projects={projects}
-            activeProjectId={activeProjectId}
-            onSelect={onProjectSelect}
-            onAdd={onShowAddPanel}
-            showingAddPanel={showAddPanel}
-          />
+            <ProjectSelector
+              projects={projects}
+              activeProjectId={activeProjectId}
+              onSelect={onProjectSelect}
+              onAdd={onShowAddPanel}
+              showingAddPanel={showAddPanel}
+            />
+          </div>
 
           {/* Mobile Add Panel (Directly below) */}
           {showAddPanel && (
-            <div className="md:hidden w-full animate-in fade-in zoom-in slide-in-from-top-4 duration-300">
+            <div className="md:hidden w-full animate-in fade-in zoom-in slide-in-from-top-8 duration-500">
               <AddProjectPanel onSave={onProjectAdd} onCancel={onHideAddPanel} loading={loading} />
             </div>
           )}
@@ -82,8 +84,8 @@ export default function HomePage({
         {/* Desktop Add Panel (Side-by-side) */}
         {showAddPanel && (
           <>
-            <div className="hidden md:block w-[1px] h-64 bg-[#26292F] animate-in fade-in duration-500" />
-            <div className="hidden md:block w-full max-w-[380px] animate-in fade-in slide-in-from-left-8 duration-500">
+            <div className="hidden md:block w-[1px] h-80 bg-[#26292F] animate-in fade-in duration-700" />
+            <div className="hidden md:block w-full max-w-[420px] animate-in fade-in slide-in-from-left-12 duration-700">
               <AddProjectPanel onSave={onProjectAdd} onCancel={onHideAddPanel} loading={loading} />
             </div>
           </>
