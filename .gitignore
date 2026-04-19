@@ -1,24 +1,60 @@
-# Logs
-logs
+# ─── Dependencies ───────────────────────────────────────────
+node_modules/
+.pnp
+.pnp.js
+
+# ─── Build Output ────────────────────────────────────────────
+dist/
+dist-ssr/
+build/
+out/
+
+# ─── Vite ────────────────────────────────────────────────────
+*.local
+vite.config.ts.timestamp-*
+
+# ─── Environment & Secrets ───────────────────────────────────
+# Doppler injects secrets at runtime — no .env files should ever be committed
+.env
+.env.*
+!.env.example        # only the example template is safe to commit
+.doppler/
+
+# ─── Testing ─────────────────────────────────────────────────
+coverage/
+.vitest-cache/
+
+# ─── TypeScript ──────────────────────────────────────────────
+*.tsbuildinfo
+
+# ─── Logs ────────────────────────────────────────────────────
+logs/
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
-lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
+# ─── OS & Editor ─────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
 
-# Editor directories and files
 .vscode/*
 !.vscode/extensions.json
-.idea
-.DS_Store
+!.vscode/settings.json
+.idea/
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+
+# ─── Vercel ──────────────────────────────────────────────────
+.vercel/
+
+# ─── Misc ────────────────────────────────────────────────────
+*.tgz
+.cache/
+tmp/
+temp/
