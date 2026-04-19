@@ -1,5 +1,6 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useMemo } from 'react'
 import { useProjects } from '../hooks/useProjects'
+import { generateMockSessions } from '../hooks/useMock'
 import { sessionService } from '../services/sessionService'
 import NavBar from './NavBar'
 import HomePage from './HomePage'
@@ -21,6 +22,7 @@ function makeTimerState(projectId: string): ProjectTimerState {
 
 export default function Layout() {
   const { projects, loading, error, addProject } = useProjects()
+  const mockSessions = useMemo(() => generateMockSessions(projects), [projects])
 
   const [activePage, setActivePage] = useState<NavPage>('home')
   const [activeProjectId, setActiveProjectId] = useState('')
@@ -223,7 +225,7 @@ export default function Layout() {
           />
         )}
         {activePage === 'profile' && <ProfilePage />}
-        {activePage === 'stats' && <StatsPage />}
+        {activePage === 'stats' && <StatsPage projects={projects} sessions={mockSessions} />}
       </div>
 
       {notification && (
