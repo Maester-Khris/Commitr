@@ -1,3 +1,5 @@
+// Retired in home-ui-dynamic-2-supabase.
+// Kept for reference. Do not use in production code.
 import type { Project, Session } from '../types'
 import { PROJECT_COLORS } from '../components/AddProjectPanel'
 
