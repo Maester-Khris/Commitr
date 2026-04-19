@@ -24,6 +24,7 @@ export default function Layout() {
     () => initTimerStates(initialProjects)
   )
   const [toast, setToast] = useState<string | null>(null)
+  const [showAddPanel, setShowAddPanel] = useState(false)
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
   useEffect(() => {
@@ -92,9 +93,23 @@ export default function Layout() {
   }
 
   function handleProjectAdd(name: string, color: string) {
-    const id = `project-${Date.now()}`
-    setProjects(prev => [...prev, { id, name, color, createdAt: new Date().toISOString() }])
-    setTimerStates(prev => ({ ...prev, [id]: makeTimerState(id) }))
+    const newProject: Project = {
+      id: crypto.randomUUID(),
+      name,
+      color,
+      createdAt: new Date().toISOString(),
+    }
+    setProjects(prev => [...prev, newProject])
+    setTimerStates(prev => ({
+      ...prev,
+      [newProject.id]: {
+        projectId: newProject.id,
+        secondsRemaining: 1500,
+        totalSecondsToday: 0,
+        isRunning: false,
+      }
+    }))
+    setShowAddPanel(false)
   }
 
   return (
@@ -115,6 +130,9 @@ export default function Layout() {
             timerStates={timerStates}
             onProjectSelect={handleProjectSelect}
             onTimerToggle={handleTimerToggle}
+            showAddPanel={showAddPanel}
+            onShowAddPanel={() => setShowAddPanel(true)}
+            onHideAddPanel={() => setShowAddPanel(false)}
             onProjectAdd={handleProjectAdd}
           />
         )}
