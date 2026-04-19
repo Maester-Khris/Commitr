@@ -1,11 +1,5 @@
-import './App.css'
+import Layout from './components/Layout'
 
-function App() {
-  return (
-    <>
-      Hello from commitr team
-    </>
-  )
+export default function App() {
+  return <Layout />
 }
-
-export default App

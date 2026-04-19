@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+@keyframes orbit {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes slide-in-up {
+  from { transform: translateY(60%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
