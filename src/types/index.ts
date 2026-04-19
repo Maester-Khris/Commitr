@@ -20,4 +20,6 @@ export interface ProjectTimerState {
   secondsRemaining: number
   totalSecondsToday: number
   isRunning: boolean
+  startedAt: string | null
+  isPaused: boolean
 }

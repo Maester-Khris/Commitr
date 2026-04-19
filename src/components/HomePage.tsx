@@ -3,6 +3,7 @@ import PlayerButton from './PlayerButton'
 import ProjectSelector from './ProjectSelector'
 import SessionStatus from './SessionStatus'
 import AddProjectPanel from './AddProjectPanel'
+import ResetTimerPrompt from './ResetTimer'
 
 interface HomePageProps {
   projects: Project[]
@@ -10,10 +11,12 @@ interface HomePageProps {
   timerStates: Record<string, ProjectTimerState>
   onProjectSelect: (id: string) => void
   onTimerToggle: () => void
+  onTimerReset: () => void
   showAddPanel: boolean
   onShowAddPanel: () => void
   onHideAddPanel: () => void
   onProjectAdd: (name: string, color: string) => void
+  loading?: boolean
 }
 
 export default function HomePage({
@@ -22,14 +25,15 @@ export default function HomePage({
   timerStates,
   onProjectSelect,
   onTimerToggle,
+  onTimerReset,
   showAddPanel,
   onShowAddPanel,
   onHideAddPanel,
   onProjectAdd,
+  loading,
 }: HomePageProps) {
   const activeTimer = timerStates[activeProjectId]
   const activeProject = projects.find(p => p.id === activeProjectId)
-
 
   return (
     <main className="flex-1 flex items-center justify-center w-full min-h-0 p-6">
@@ -44,11 +48,20 @@ export default function HomePage({
             onToggle={onTimerToggle}
           />
 
-          <SessionStatus
-            isRunning={activeTimer?.isRunning ?? false}
-            projectName={activeProject?.name ?? ''}
-            totalSecondsToday={activeTimer?.totalSecondsToday ?? 0}
-          />
+          {activeTimer?.isPaused ? (
+            <ResetTimerPrompt
+              secondsRemaining={activeTimer.secondsRemaining}
+              projectName={activeProject?.name ?? ''}
+              onResume={onTimerToggle}
+              onReset={onTimerReset}
+            />
+          ) : (
+            <SessionStatus
+              isRunning={activeTimer?.isRunning ?? false}
+              projectName={activeProject?.name ?? ''}
+              totalSecondsToday={activeTimer?.totalSecondsToday ?? 0}
+            />
+          )}
 
           <ProjectSelector
             projects={projects}
@@ -61,7 +74,7 @@ export default function HomePage({
           {/* Mobile Add Panel (Directly below) */}
           {showAddPanel && (
             <div className="md:hidden w-full animate-in fade-in zoom-in slide-in-from-top-4 duration-300">
-              <AddProjectPanel onSave={onProjectAdd} onCancel={onHideAddPanel} />
+              <AddProjectPanel onSave={onProjectAdd} onCancel={onHideAddPanel} loading={loading} />
             </div>
           )}
         </div>
@@ -71,7 +84,7 @@ export default function HomePage({
           <>
             <div className="hidden md:block w-[1px] h-64 bg-[#26292F] animate-in fade-in duration-500" />
             <div className="hidden md:block w-full max-w-[380px] animate-in fade-in slide-in-from-left-8 duration-500">
-              <AddProjectPanel onSave={onProjectAdd} onCancel={onHideAddPanel} />
+              <AddProjectPanel onSave={onProjectAdd} onCancel={onHideAddPanel} loading={loading} />
             </div>
           </>
         )}
