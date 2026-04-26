@@ -1,9 +1,37 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useProfile } from '@/hooks/useProfile'
 
 export default function ProfilePage() {
+  const { profile, loading, error, saveProfile } = useProfile()
+
   const [workDuration, setWorkDuration] = useState(25)
   const [shortBreak, setShortBreak] = useState(5)
   const [longBreak, setLongBreak] = useState(15)
+  const [saving, setSaving] = useState(false)
+
+  useEffect(() => {
+    if (profile) {
+      setWorkDuration(profile.workDuration)
+      setShortBreak(profile.shortBreakDuration)
+      setLongBreak(profile.longBreakDuration)
+    }
+  }, [profile])
+
+  const isDirty = profile && (
+    workDuration !== profile.workDuration ||
+    shortBreak !== profile.shortBreakDuration ||
+    longBreak !== profile.longBreakDuration
+  )
+
+  async function handleSave() {
+    if (!isDirty) return
+    setSaving(true)
+    try {
+      await saveProfile({ workDuration, shortBreakDuration: shortBreak, longBreakDuration: longBreak })
+    } finally {
+      setSaving(false)
+    }
+  }
 
   return (
     <div className="w-full min-h-[90vh] bg-[#0F1115] p-8 text-slate-200">
@@ -18,6 +46,10 @@ export default function ProfilePage() {
             <span className="text-xs font-bold text-[#378ADD] uppercase tracking-widest">Timer defaults</span>
             <p className="text-slate-500 text-xs">Configure your default focus and break durations.</p>
           </div>
+
+          {error && (
+            <p className="text-xs text-red-400">{error}</p>
+          )}
 
           <div className="flex flex-col gap-6">
             <div className="flex flex-col gap-4">
@@ -35,7 +67,8 @@ export default function ProfilePage() {
                     max={120}
                     value={workDuration}
                     onChange={e => setWorkDuration(Number(e.target.value))}
-                    className="w-20 h-10 text-center text-sm font-bold border border-[#26292F] rounded-lg bg-[#1E2329] text-white focus:outline-none focus:border-[#378ADD] transition-colors"
+                    disabled={loading}
+                    className="w-20 h-10 text-center text-sm font-bold border border-[#26292F] rounded-lg bg-[#1E2329] text-white focus:outline-none focus:border-[#378ADD] transition-colors disabled:opacity-40"
                   />
                   <span className="text-xs font-bold text-slate-500 uppercase tracking-widest w-8">min</span>
                 </div>
@@ -58,7 +91,8 @@ export default function ProfilePage() {
                       max={120}
                       value={shortBreak}
                       onChange={e => setShortBreak(Number(e.target.value))}
-                      className="w-20 h-10 text-center text-sm font-bold border border-[#26292F] rounded-lg bg-[#1E2329] text-white focus:outline-none focus:border-[#378ADD] transition-colors"
+                      disabled={loading}
+                      className="w-20 h-10 text-center text-sm font-bold border border-[#26292F] rounded-lg bg-[#1E2329] text-white focus:outline-none focus:border-[#378ADD] transition-colors disabled:opacity-40"
                     />
                     <span className="text-xs font-bold text-slate-500 uppercase tracking-widest w-8">min</span>
                   </div>
@@ -76,7 +110,8 @@ export default function ProfilePage() {
                       max={120}
                       value={longBreak}
                       onChange={e => setLongBreak(Number(e.target.value))}
-                      className="w-20 h-10 text-center text-sm font-bold border border-[#26292F] rounded-lg bg-[#1E2329] text-white focus:outline-none focus:border-[#378ADD] transition-colors"
+                      disabled={loading}
+                      className="w-20 h-10 text-center text-sm font-bold border border-[#26292F] rounded-lg bg-[#1E2329] text-white focus:outline-none focus:border-[#378ADD] transition-colors disabled:opacity-40"
                     />
                     <span className="text-xs font-bold text-slate-500 uppercase tracking-widest w-8">min</span>
                   </div>
@@ -87,10 +122,11 @@ export default function ProfilePage() {
 
           <div className="flex justify-end pt-4 border-t border-[#26292F]">
             <button
-              disabled
-              className="px-8 py-3 text-sm font-bold rounded-full bg-[#378ADD] text-white opacity-50 cursor-not-allowed uppercase tracking-widest shadow-lg shadow-[#378ADD20]"
+              onClick={handleSave}
+              disabled={!isDirty || saving}
+              className="px-8 py-3 text-sm font-bold rounded-full bg-[#378ADD] text-white uppercase tracking-widest shadow-lg shadow-[#378ADD20] disabled:opacity-50 disabled:cursor-not-allowed transition-opacity"
             >
-              Save changes
+              {saving ? 'Saving...' : 'Save changes'}
             </button>
           </div>
         </div>
