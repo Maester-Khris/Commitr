@@ -1,5 +1,27 @@
 export type NavPage = 'home' | 'profile' | 'stats'
 
+export type Granularity = 'day' | 'week' | 'month' | 'year'
+
+export interface AggregatedBar {
+  label: string
+  period: string
+  totalSeconds: number
+}
+
+export interface ContributionDay {
+  day: string
+  level: number
+  totalSeconds: number
+}
+
+export interface SummaryStats {
+  totalSeconds: number
+  dailyAverageSeconds: number
+  sessionCount: number
+  topProjectId: string | null
+  topProjectName: string | null
+}
+
 export interface Project {
   id: string
   name: string
