@@ -1,9 +1,9 @@
 import { useMemo } from 'react'
-import type { Session } from '../../types'
-import { contributionGrid, gridMonthLabels } from '../../lib/statsHelpers'
+import type { ContributionDay } from '../../types'
+import { gridMonthLabels } from '../../lib/statsHelpers'
 
 interface ContributionGridProps {
-  sessions: Session[]
+  grid: ContributionDay[]
 }
 
 const LEGEND_COLORS = ['#1E2329', '#B5D4F4', '#378ADD', '#185FA5', '#0C447C']
@@ -44,9 +44,30 @@ function DayLabels() {
   )
 }
 
-export default function ContributionGrid({ sessions }: ContributionGridProps) {
-  const grid = useMemo(() => contributionGrid(sessions), [sessions])
+export default function ContributionGrid({ grid }: ContributionGridProps) {
   const monthLabels = useMemo(() => gridMonthLabels(), [])
+
+  const dayMap = useMemo(() => new Map(grid.map(d => [d.day, d])), [grid])
+
+  const cells = useMemo(() => {
+    const now = new Date()
+    const dayOfWeek = now.getDay()
+    const currentWeekMonday = new Date(now)
+    currentWeekMonday.setDate(now.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1))
+    currentWeekMonday.setHours(0, 0, 0, 0)
+
+    const gridStart = new Date(currentWeekMonday)
+    gridStart.setDate(currentWeekMonday.getDate() - 51 * 7)
+
+    return Array.from({ length: 52 }, (_, w) =>
+      Array.from({ length: 7 }, (_, d) => {
+        const day = new Date(gridStart)
+        day.setDate(gridStart.getDate() + w * 7 + d)
+        const isoDate = day.toISOString().slice(0, 10)
+        return { isoDate, level: dayMap.get(isoDate)?.level ?? 0 }
+      })
+    )
+  }, [dayMap])
 
   return (
     <div className="bg-[#16191D] border border-[#26292F] rounded-[16px] p-6 md:p-8">
@@ -57,7 +78,6 @@ export default function ContributionGrid({ sessions }: ContributionGridProps) {
       <div className="flex items-start">
         <DayLabels />
         <div className="flex-1 overflow-hidden pb-2">
-          {/* Month labels */}
           <div className="relative mb-3 h-4 w-full">
             {monthLabels.map(m => (
               <span
@@ -69,13 +89,12 @@ export default function ContributionGrid({ sessions }: ContributionGridProps) {
               </span>
             ))}
           </div>
-          {/* Grid */}
           <div className="flex gap-[3px] w-full">
-            {grid.map((week, weekIndex) => (
+            {cells.map((week, weekIndex) => (
               <div key={weekIndex} className="flex-1 flex flex-col gap-[3px]">
-                {week.map((level, dayIndex) => (
+                {week.map(({ isoDate, level }) => (
                   <div
-                    key={dayIndex}
+                    key={isoDate}
                     data-testid="grid-cell"
                     className="w-full aspect-square transition-all duration-200 hover:scale-125 hover:z-10 cursor-pointer"
                     style={{
