@@ -5,7 +5,7 @@ import type { Granularity, AggregatedBar, ContributionDay, SummaryStats } from '
 const toBar = (row: Record<string, unknown>, granularity: Granularity): AggregatedBar => ({
   period: row.period as string,
   label: formatPeriodLabel(row.period as string, granularity),
-  totalSeconds: row.total_seconds as number,
+  totalSeconds: (row.total_seconds as number) ?? 0,
 })
 
 const toContributionDay = (row: Record<string, unknown>): ContributionDay => ({
@@ -67,11 +67,11 @@ export const statsService = {
 
     if (error) throw new Error(error.message)
     return {
-      totalSeconds: data.total_seconds,
-      dailyAverageSeconds: data.daily_average_seconds,
-      sessionCount: data.session_count,
-      topProjectId: data.top_project_id,
-      topProjectName: data.top_project_name,
+      totalSeconds: data?.total_seconds ?? 0,
+      dailyAverageSeconds: data?.daily_average_seconds ?? 0,
+      sessionCount: data?.session_count ?? 0,
+      topProjectId: data?.top_project_id ?? null,
+      topProjectName: data?.top_project_name ?? null,
     }
   },
 }
