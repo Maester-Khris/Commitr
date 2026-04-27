@@ -9,24 +9,24 @@ export default function SessionStatus({ isRunning, projectName, totalSecondsToda
 
   if (!isRunning) {
     return (
-      <p className="text-sm text-gray-400 text-center">
-        Click to start session
+      <div className="flex flex-col items-center gap-1">
+        <p className="text-sm font-bold text-slate-200 uppercase tracking-widest">Idle</p>
         {totalSecondsToday > 0 && (
-          <span className="text-gray-500"> · {projectName} today: {minutes}m</span>
+          <p className="text-[10px] font-medium text-slate-500 uppercase tracking-[0.1em]">
+            Today: <span className="text-slate-300">{minutes}m</span> logged
+          </p>
         )}
-      </p>
+      </div>
     )
   }
 
   return (
-    <p className="text-sm text-gray-300 text-center flex items-center justify-center gap-2">
-      <span className="inline-block w-2 h-2 rounded-full bg-green-500" />
-      <span>
-        {projectName} · running
-        {totalSecondsToday > 0 && (
-          <span className="text-gray-500"> · {projectName} today: {minutes}m</span>
-        )}
-      </span>
-    </p>
+    <div className="flex flex-col items-center gap-1">
+      <div className="flex items-center gap-2">
+        <span className="w-1.5 h-1.5 rounded-full bg-[#378ADD] animate-pulse" />
+        <p className="text-sm font-bold text-white uppercase tracking-widest">{projectName}</p>
+      </div>
+      <p className="text-[10px] font-bold text-[#378ADD] uppercase tracking-[0.2em] animate-pulse">Running</p>
+    </div>
   )
 }

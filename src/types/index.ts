@@ -1,5 +1,27 @@
 export type NavPage = 'home' | 'profile' | 'stats'
 
+export type Granularity = 'day' | 'week' | 'month' | 'year'
+
+export interface AggregatedBar {
+  label: string
+  period: string
+  totalSeconds: number
+}
+
+export interface ContributionDay {
+  day: string
+  level: number
+  totalSeconds: number
+}
+
+export interface SummaryStats {
+  totalSeconds: number
+  dailyAverageSeconds: number
+  sessionCount: number
+  topProjectId: string | null
+  topProjectName: string | null
+}
+
 export interface Project {
   id: string
   name: string
@@ -23,3 +45,21 @@ export interface ProjectTimerState {
   startedAt: string | null
   isPaused: boolean
 }
+
+export interface UserProfile {
+  id: string
+  workDuration: number       // minutes, default 25
+  shortBreakDuration: number // minutes, default 5
+  longBreakDuration: number  // minutes, default 15
+  createdAt: string
+  updatedAt: string
+}
+
+export const toUserProfile = (row: any): UserProfile => ({
+  id: row.id,
+  workDuration: row.work_duration,
+  shortBreakDuration: row.short_break_duration,
+  longBreakDuration: row.long_break_duration,
+  createdAt: row.created_at,
+  updatedAt: row.updated_at,
+})

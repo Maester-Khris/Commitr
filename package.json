@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "doppler-dev": "doppler setup --project commitr --config dev_personal --no-interactive && doppler run -- vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "test": "vitest",

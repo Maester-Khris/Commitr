@@ -223,7 +223,7 @@ export default function Layout() {
           />
         )}
         {activePage === 'profile' && <ProfilePage />}
-        {activePage === 'stats' && <StatsPage />}
+        {activePage === 'stats' && <StatsPage projects={projects} />}
       </div>
 
       {notification && (
