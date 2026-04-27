@@ -1,3 +1,6 @@
+export type { User } from '@supabase/supabase-js'
+export type { Session as AuthSession } from '@supabase/supabase-js'
+
 export type NavPage = 'home' | 'profile' | 'stats'
 
 export type Granularity = 'day' | 'week' | 'month' | 'year'

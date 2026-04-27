@@ -1,5 +1,10 @@
+import { AuthProvider } from './context/AuthContext'
 import Layout from './components/Layout'
 
 export default function App() {
-  return <Layout />
+  return (
+    <AuthProvider>
+      <Layout />
+    </AuthProvider>
+  )
 }

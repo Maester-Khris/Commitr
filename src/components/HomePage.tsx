@@ -36,7 +36,7 @@ export default function HomePage({
   const activeProject = projects.find(p => p.id === activeProjectId)
 
   return (
-    <main className="flex-1 flex flex-col items-center justify-center w-full min-h-[90vh] bg-[#0F1115] p-8 text-slate-200">
+    <main className="flex-1 flex flex-col items-center justify-center w-full min-h-[90vh] p-8 text-slate-200">
       <div className={`flex flex-col md:flex-row items-center justify-center transition-all duration-700 ease-in-out ${showAddPanel ? 'gap-16 md:gap-32' : 'gap-0'}`}>
 
         {/* Left Section: Timer & Controls */}
