@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useAuth } from '@/context/AuthContext'
 import { authService } from '@/services/authService'
-import AuthNavBar from './AuthNavBar'
+import brand from '../assets/images/brand.png'
 import SignInForm from './SignInForm'
 import SignUpForm from './SignUpForm'
 import AuthToggle from './AuthToggle'
@@ -51,11 +51,11 @@ export default function AuthPage() {
 
   return (
     <div className="min-h-screen flex flex-col" style={{ background: '#111318' }}>
-      <AuthNavBar />
-
       <div className="flex-1 flex flex-col items-center justify-center px-4 py-8">
-        <div className="w-full max-w-[400px]">
-          <div className="rounded-xl border border-white/10 bg-white/5 p-8">
+        <div className="w-full max-w-[400px] flex flex-col items-center">
+          <img src={brand} alt="Commitr" className="h-20 w-auto mb-10 object-contain" />
+          
+          <div className="w-full rounded-xl border border-white/10 bg-white/5 p-8">
             {mode === 'signin' ? (
               <SignInForm onSubmit={handleSignIn} onGoogle={handleGoogle} loading={loading} />
             ) : (
