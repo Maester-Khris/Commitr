@@ -21,10 +21,10 @@ export default function StatsPage({ projects }: StatsPageProps) {
   function shiftWindow(direction: 1 | -1) {
     const start = new Date(windowStart)
     switch (granularity) {
-      case 'day':   start.setDate(start.getDate() + direction); break
-      case 'week':  start.setDate(start.getDate() + direction * 7); break
+      case 'day': start.setDate(start.getDate() + direction); break
+      case 'week': start.setDate(start.getDate() + direction * 7); break
       case 'month': start.setMonth(start.getMonth() + direction); break
-      case 'year':  start.setFullYear(start.getFullYear() + direction); break
+      case 'year': start.setFullYear(start.getFullYear() + direction); break
     }
     setWindowStart(startOf(granularity, start).toISOString())
     setWindowEnd(endOf(granularity, start).toISOString())
@@ -37,21 +37,23 @@ export default function StatsPage({ projects }: StatsPageProps) {
   }
 
   return (
-    <div className="flex flex-col gap-6 md:gap-12 w-full min-h-[90vh] bg-[#0F1115] p-4 md:p-8 text-slate-200">
-      {error && <p className="text-xs text-red-400">{error}</p>}
-      <HistogramSection
-        bars={bars}
-        summary={summary}
-        projects={projects}
-        activeScope={activeScope}
-        granularity={granularity}
-        windowStart={windowStart}
-        loading={loading}
-        onScopeChange={setActiveScope}
-        onGranularityChange={handleGranularityChange}
-        onNavigate={shiftWindow}
-      />
-      <ContributionGrid grid={grid} />
+    <div className="w-full min-h-[90vh] p-4 md:p-8 text-slate-200">
+      <div className="max-w-4xl mx-auto flex flex-col gap-6 md:gap-12">
+        {error && <p className="text-xs text-red-400">{error}</p>}
+        <HistogramSection
+          bars={bars}
+          summary={summary}
+          projects={projects}
+          activeScope={activeScope}
+          granularity={granularity}
+          windowStart={windowStart}
+          loading={loading}
+          onScopeChange={setActiveScope}
+          onGranularityChange={handleGranularityChange}
+          onNavigate={shiftWindow}
+        />
+        <ContributionGrid grid={grid} />
+      </div>
     </div>
   )
 }

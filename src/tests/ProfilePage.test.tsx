@@ -6,7 +6,19 @@ vi.mock('@/hooks/useProfile', () => ({
   useProfile: vi.fn(),
 }))
 
+vi.mock('@/context/AuthContext', () => ({
+  useAuth: vi.fn(),
+}))
+
+vi.mock('@/services/authService', () => ({
+  authService: {
+    updateUser: vi.fn(),
+  },
+}))
+
 import { useProfile } from '@/hooks/useProfile'
+import { useAuth } from '@/context/AuthContext'
+import { authService } from '@/services/authService'
 
 const mockProfile = {
   id: '1',
@@ -17,15 +29,36 @@ const mockProfile = {
   updatedAt: '2024-01-01T00:00:00Z',
 }
 
+const mockUser = {
+  email: 'test@example.com',
+  user_metadata: {
+    display_name: 'testuser'
+  }
+}
+
 const saveProfile = vi.fn()
 
 beforeEach(() => {
   vi.clearAllMocks()
   vi.mocked(useProfile).mockReturnValue({ profile: mockProfile, loading: false, error: null, saveProfile })
+  vi.mocked(useAuth).mockReturnValue({ user: mockUser, loading: false, session: null, signIn: vi.fn(), signUp: vi.fn(), signInWithGoogle: vi.fn(), signOut: vi.fn() })
+  vi.mocked(authService.updateUser).mockResolvedValue({ user: mockUser, error: null })
 })
 
 describe('ProfilePage', () => {
-  it('renders all 3 fields with correct default values', () => {
+  it('renders both sections', () => {
+    render(<ProfilePage />)
+    expect(screen.getByText('Personal info')).toBeInTheDocument()
+    expect(screen.getByText('Timer defaults')).toBeInTheDocument()
+  })
+
+  it('renders username prefilled from metadata', () => {
+    render(<ProfilePage />)
+    const usernameInput = screen.getByDisplayValue('testuser')
+    expect(usernameInput).toBeInTheDocument()
+  })
+
+  it('renders timer fields with default values', () => {
     render(<ProfilePage />)
     const inputs = screen.getAllByRole('spinbutton')
     expect(inputs).toHaveLength(3)
@@ -34,53 +67,35 @@ describe('ProfilePage', () => {
     expect(inputs[2]).toHaveValue(15)
   })
 
-  it('changing work duration input updates the displayed value', () => {
+  it('Save personal info calls updateUser', async () => {
+    render(<ProfilePage />)
+    const usernameInput = screen.getByLabelText(/username/i)
+    fireEvent.change(usernameInput, { target: { value: 'newusername' } })
+    
+    const saveBtn = screen.getByRole('button', { name: /save personal info/i })
+    fireEvent.click(saveBtn)
+    
+    expect(authService.updateUser).toHaveBeenCalledWith({ data: { display_name: 'newusername' } })
+  })
+
+  it('Save timer defaults calls saveProfile', () => {
     render(<ProfilePage />)
     const inputs = screen.getAllByRole('spinbutton')
     fireEvent.change(inputs[0], { target: { value: '30' } })
-    expect(inputs[0]).toHaveValue(30)
-  })
-
-  it('changing short break input updates the displayed value', () => {
-    render(<ProfilePage />)
-    const inputs = screen.getAllByRole('spinbutton')
-    fireEvent.change(inputs[1], { target: { value: '10' } })
-    expect(inputs[1]).toHaveValue(10)
-  })
-
-  it('changing long break input updates the displayed value', () => {
-    render(<ProfilePage />)
-    const inputs = screen.getAllByRole('spinbutton')
-    fireEvent.change(inputs[2], { target: { value: '20' } })
-    expect(inputs[2]).toHaveValue(20)
-  })
-
-  it('Save button is disabled when values match profile', () => {
-    render(<ProfilePage />)
-    const btn = screen.getByRole('button', { name: /save changes/i })
-    expect(btn).toBeDisabled()
-  })
-
-  it('Save button is enabled when a value differs from profile', () => {
-    render(<ProfilePage />)
-    const inputs = screen.getAllByRole('spinbutton')
-    fireEvent.change(inputs[0], { target: { value: '30' } })
-    const btn = screen.getByRole('button', { name: /save changes/i })
-    expect(btn).toBeEnabled()
-  })
-
-  it('Save button calls saveProfile with updated values', () => {
-    render(<ProfilePage />)
-    const inputs = screen.getAllByRole('spinbutton')
-    fireEvent.change(inputs[0], { target: { value: '30' } })
-    fireEvent.click(screen.getByRole('button', { name: /save changes/i }))
+    
+    const saveBtn = screen.getByRole('button', { name: /save timer defaults/i })
+    fireEvent.click(saveBtn)
+    
     expect(saveProfile).toHaveBeenCalledWith({ workDuration: 30, shortBreakDuration: 5, longBreakDuration: 15 })
   })
 
-  it('inputs are disabled while loading', () => {
-    vi.mocked(useProfile).mockReturnValue({ profile: null, loading: true, error: null, saveProfile })
+  it('New password field shows confirm password field when not empty', () => {
     render(<ProfilePage />)
-    const inputs = screen.getAllByRole('spinbutton')
-    inputs.forEach(input => expect(input).toBeDisabled())
+    expect(screen.queryByLabelText(/confirm new password/i)).not.toBeInTheDocument()
+    
+    const passInput = screen.getByLabelText(/new password/i)
+    fireEvent.change(passInput, { target: { value: 'password123' } })
+    
+    expect(screen.getByLabelText(/confirm new password/i)).toBeInTheDocument()
   })
 })
