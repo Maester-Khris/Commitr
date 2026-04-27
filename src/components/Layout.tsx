@@ -1,11 +1,14 @@
 import { useState, useRef, useEffect } from 'react'
 import { useProjects } from '../hooks/useProjects'
 import { sessionService } from '../services/sessionService'
+import { useAuth } from '../context/AuthContext'
 import NavBar from './NavBar'
 import HomePage from './HomePage'
 import ProfilePage from './ProfilePage'
 import StatsPage from './StatsPage'
 import NotificationBanner from './NotificationBanner'
+import LoadingScreen from './LoadingScreen'
+import AuthPage from './AuthPage'
 import type { NavPage, ProjectTimerState } from '../types'
 
 function makeTimerState(projectId: string): ProjectTimerState {
@@ -20,6 +23,7 @@ function makeTimerState(projectId: string): ProjectTimerState {
 }
 
 export default function Layout() {
+  const { session, loading: authLoading, user, signOut } = useAuth()
   const { projects, loading, error, addProject } = useProjects()
 
   const [activePage, setActivePage] = useState<NavPage>('home')
@@ -50,6 +54,9 @@ export default function Layout() {
       if (intervalRef.current) clearInterval(intervalRef.current)
     }
   }, [])
+
+  if (authLoading) return <LoadingScreen />
+  if (!session) return <AuthPage />
 
   function stopInterval() {
     if (intervalRef.current) {
@@ -198,7 +205,14 @@ export default function Layout() {
 
   return (
     <div className="min-h-screen flex flex-col text-white overflow-x-hidden" style={{ background: '#111318' }}>
-      <NavBar activePage={activePage} onNavigate={setActivePage} />
+      <NavBar
+        activePage={activePage}
+        onNavigate={setActivePage}
+        userEmail={user?.email}
+        onSignOut={async () => {
+          await signOut()
+        }}
+      />
 
       {toast && (
         <div className="fixed top-4 right-4 bg-gray-800 border border-gray-700 text-white px-4 py-2 rounded-lg text-sm z-50 shadow-lg">
