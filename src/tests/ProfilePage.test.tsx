@@ -30,6 +30,10 @@ const mockProfile = {
 }
 
 const mockUser = {
+  id: 'test-user-id',
+  aud: 'authenticated',
+  created_at: '2024-01-01T00:00:00Z',
+  app_metadata: {},
   email: 'test@example.com',
   user_metadata: {
     display_name: 'testuser'
