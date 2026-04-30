@@ -121,7 +121,12 @@ export default function HistogramSection({
                 </div>
               ))
             : bars.map((bar, i) => (
-                <div key={i} className="flex-1 flex flex-col items-center h-full justify-end group relative" data-testid="histogram-bar">
+                <div
+                  key={i}
+                  className="flex flex-col items-center h-full justify-end group relative min-w-0"
+                  data-testid="histogram-bar"
+                  style={{ flex: '1 1 0%' }}
+                >
                   <div
                     className="w-full rounded-t-sm md:rounded-t-md transition-all duration-300 hover:brightness-110"
                     style={{
@@ -130,7 +135,7 @@ export default function HistogramSection({
                       minHeight: bar.totalSeconds > 0 ? '4px' : '0',
                     }}
                   />
-                  <span className="absolute -bottom-6 text-[8px] md:text-[10px] font-medium text-slate-500 group-hover:text-slate-300 transition-colors">{bar.label}</span>
+                  <span className="absolute -bottom-6 text-[8px] md:text-[10px] font-medium text-slate-500 group-hover:text-slate-300 transition-colors truncate w-full text-center">{bar.label}</span>
                 </div>
               ))
           }
