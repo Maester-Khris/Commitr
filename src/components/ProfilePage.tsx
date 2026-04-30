@@ -259,7 +259,7 @@ export default function ProfilePage() {
             <div className="flex flex-col gap-6">
               <div className="flex flex-col gap-4">
                 <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Session</span>
-                <div className="flex items-center justify-between gap-4 p-4 rounded-xl bg-[#1E232950] border border-[#26292F]">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4 p-4 rounded-xl bg-[#1E232950] border border-[#26292F]">
                   <div className="flex flex-col">
                     <span className="text-sm font-medium">Work duration</span>
                     <span className="text-xs text-slate-500">Duration for each focus session</span>
@@ -280,7 +280,7 @@ export default function ProfilePage() {
               <div className="flex flex-col gap-4">
                 <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Breaks</span>
                 <div className="flex flex-col gap-3">
-                  <div className="flex items-center justify-between gap-4 p-4 rounded-xl bg-[#1E232950] border border-[#26292F]">
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4 p-4 rounded-xl bg-[#1E232950] border border-[#26292F]">
                     <div className="flex flex-col">
                       <span className="text-sm font-medium">Short break</span>
                       <span className="text-xs text-slate-500">Between each focus session</span>
@@ -296,7 +296,7 @@ export default function ProfilePage() {
                       <span className="text-xs font-bold text-slate-500 uppercase tracking-widest w-8">min</span>
                     </div>
                   </div>
-                  <div className="flex items-center justify-between gap-4 p-4 rounded-xl bg-[#1E232950] border border-[#26292F]">
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4 p-4 rounded-xl bg-[#1E232950] border border-[#26292F]">
                     <div className="flex flex-col">
                       <span className="text-sm font-medium">Long break</span>
                       <span className="text-xs text-slate-500">After every 4 focus sessions</span>
@@ -347,7 +347,7 @@ export default function ProfilePage() {
               <div className="flex flex-col gap-4">
                 <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Google account</span>
                 {isGoogleUser ? (
-                  <div className="flex items-center justify-between gap-4 p-4 rounded-xl bg-[#1E232950] border border-[#26292F]">
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4 p-4 rounded-xl bg-[#1E232950] border border-[#26292F]">
                     <div className="flex items-center gap-3">
                       <GoogleIcon />
                       <div className="flex flex-col">
@@ -361,7 +361,7 @@ export default function ProfilePage() {
                     </div>
                   </div>
                 ) : (
-                  <div className="flex items-center justify-between gap-4 p-4 rounded-xl bg-[#1E232950] border border-[#26292F]">
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4 p-4 rounded-xl bg-[#1E232950] border border-[#26292F]">
                     <div className="flex items-center gap-3">
                       <GoogleIcon />
                       <div className="flex flex-col">
@@ -386,7 +386,7 @@ export default function ProfilePage() {
               <div className="flex flex-col gap-4">
                 <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Integrations</span>
                 <div className="flex flex-col gap-3">
-                  <div className="flex items-center justify-between gap-4 p-4 rounded-xl bg-[#1E232950] border border-[#26292F]">
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4 p-4 rounded-xl bg-[#1E232950] border border-[#26292F]">
                     <div className="flex items-center gap-3">
                       <CalendarIcon />
                       <div className="flex flex-col">
@@ -402,7 +402,7 @@ export default function ProfilePage() {
                       Connect
                     </button>
                   </div>
-                  <div className="flex items-center justify-between gap-4 p-4 rounded-xl bg-[#1E232950] border border-[#26292F]">
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4 p-4 rounded-xl bg-[#1E232950] border border-[#26292F]">
                     <div className="flex items-center gap-3">
                       <ClockIconSm />
                       <div className="flex flex-col">
@@ -426,7 +426,7 @@ export default function ProfilePage() {
               {/* Subsection 3: Devices */}
               <div className="flex flex-col gap-4">
                 <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Devices</span>
-                <div className="flex items-center justify-between gap-4 p-4 rounded-xl bg-[#1E232950] border border-[#26292F]">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4 p-4 rounded-xl bg-[#1E232950] border border-[#26292F]">
                   <div className="flex items-center gap-3">
                     <MobileIcon />
                     <div className="flex flex-col">
