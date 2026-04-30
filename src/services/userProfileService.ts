@@ -1,17 +1,18 @@
 import { supabase } from '@/lib/supabaseClient'
 import { toUserProfile, type UserProfile } from '@/types'
 
-// Placeholder until real auth is wired up
-const DEV_USER_ID = '00000000-0000-0000-0000-000000000001'
-
 type ProfilePatch = Pick<UserProfile, 'workDuration' | 'shortBreakDuration' | 'longBreakDuration'>
 
 export const userProfileService = {
   async getProfile(): Promise<UserProfile> {
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) throw new Error('Not authenticated')
+    const userId = user.id
+
     const { data, error } = await supabase
       .from('user_profiles')
       .select('*')
-      .eq('user_id', DEV_USER_ID)
+      .eq('user_id', userId)
       .single()
 
     if (error) throw new Error(error.message)
@@ -19,6 +20,10 @@ export const userProfileService = {
   },
 
   async updateProfile(patch: Partial<ProfilePatch>): Promise<UserProfile> {
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) throw new Error('Not authenticated')
+    const userId = user.id
+
     const { data, error } = await supabase
       .from('user_profiles')
       .update({
@@ -26,7 +31,7 @@ export const userProfileService = {
         ...(patch.shortBreakDuration !== undefined && { short_break_duration: patch.shortBreakDuration }),
         ...(patch.longBreakDuration !== undefined && { long_break_duration: patch.longBreakDuration }),
       })
-      .eq('user_id', DEV_USER_ID)
+      .eq('user_id', userId)
       .select()
       .single()
 
