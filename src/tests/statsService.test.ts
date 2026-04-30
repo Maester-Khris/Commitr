@@ -61,13 +61,13 @@ describe('statsService.getAggregatedSessions', () => {
 describe('statsService.getSummaryStats', () => {
   it('maps RPC response to SummaryStats', async () => {
     vi.mocked(supabase.rpc).mockResolvedValue({
-      data: {
+      data: [{
         total_seconds: 7200,
         daily_average_seconds: 3600,
         session_count: 4,
         top_project_id: 'p1',
         top_project_name: 'Alpha',
-      },
+      }],
       error: null,
     } as never)
 

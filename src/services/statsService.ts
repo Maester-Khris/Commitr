@@ -21,7 +21,8 @@ export const statsService = {
     startDate: string,
     endDate: string,
   ): Promise<AggregatedBar[]> {
-    const view = `sessions_by_${granularity}`
+    const viewGranularity: Granularity = granularity === 'year' ? 'month' : granularity
+    const view = `sessions_by_${viewGranularity}`
 
     let query = supabase
       .from(view)
@@ -36,7 +37,7 @@ export const statsService = {
 
     const { data, error } = await query
     if (error) throw new Error(error.message)
-    return (data ?? []).map(row => toBar(row, granularity))
+    return (data ?? []).map(row => toBar(row, viewGranularity))
   },
 
   async getContributionGrid(
@@ -67,11 +68,11 @@ export const statsService = {
 
     if (error) throw new Error(error.message)
     return {
-      totalSeconds: data?.total_seconds ?? 0,
-      dailyAverageSeconds: data?.daily_average_seconds ?? 0,
-      sessionCount: data?.session_count ?? 0,
-      topProjectId: data?.top_project_id ?? null,
-      topProjectName: data?.top_project_name ?? null,
+      totalSeconds: data?.[0]?.total_seconds ?? 0,
+      dailyAverageSeconds: data?.[0]?.daily_average_seconds ?? 0,
+      sessionCount: data?.[0]?.session_count ?? 0,
+      topProjectId: data?.[0]?.top_project_id ?? null,
+      topProjectName: data?.[0]?.top_project_name ?? null,
     }
   },
 }
