@@ -17,7 +17,8 @@ vite.config.ts.timestamp-*
 # Doppler injects secrets at runtime — no .env files should ever be committed
 .env
 .env.*
-!.env.example        # only the example template is safe to commit
+# only the example template is safe to commit
+!.env.example
 .doppler/
 
 # ─── Testing ─────────────────────────────────────────────────
