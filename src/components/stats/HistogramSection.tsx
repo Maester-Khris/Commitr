@@ -37,27 +37,25 @@ export default function HistogramSection({
     : projects.find(p => p.id === activeScope)?.color ?? '#378ADD'
 
   const scopeClass = (scope: string) =>
-    `text-xs px-4 py-1.5 rounded-full border transition-all duration-200 flex items-center gap-2 whitespace-nowrap flex-shrink-0 ${
-      activeScope === scope
-        ? 'border-[#378ADD] bg-[#378ADD10] text-[#378ADD] font-medium'
-        : 'border-[#26292F] bg-[#16191D] text-slate-400 hover:border-slate-500 hover:text-slate-200'
+    `text-xs px-4 py-1.5 rounded-full border transition-all duration-200 flex items-center gap-2 whitespace-nowrap flex-shrink-0 ${activeScope === scope
+      ? 'border-[#378ADD] bg-[#378ADD10] text-[#378ADD] font-medium'
+      : 'border-[#26292F] bg-[#16191D] text-slate-400 hover:border-slate-500 hover:text-slate-200'
     }`
 
   const granClass = (g: Granularity) =>
-    `text-xs px-4 py-2 transition-all duration-200 ${
-      granularity === g
-        ? 'bg-[#378ADD] text-white font-medium'
-        : 'text-slate-400 hover:bg-[#26292F] hover:text-slate-200'
+    `text-xs px-4 py-2 transition-all duration-200 ${granularity === g
+      ? 'bg-[#378ADD] text-white font-medium'
+      : 'text-slate-400 hover:bg-[#26292F] hover:text-slate-200'
     }`
 
   const topLabel = loading ? '—' : formatDuration(maxValue)
   const midLabel = loading ? '—' : formatDuration(Math.round(maxValue / 2))
 
   const summaryCards = [
-    { value: summary ? formatDuration(summary.totalSeconds) : '—',            label: 'Total' },
-    { value: summary ? formatDuration(summary.dailyAverageSeconds) : '—',     label: 'Daily average' },
-    { value: summary ? String(summary.sessionCount) : '—',                    label: 'Sessions logged' },
-    { value: summary?.topProjectName ?? '—',                                  label: 'Top project' },
+    { value: summary ? formatDuration(summary.totalSeconds) : '—', label: 'Total' },
+    { value: summary ? formatDuration(summary.dailyAverageSeconds) : '—', label: 'Daily average' },
+    { value: summary ? String(summary.sessionCount) : '—', label: 'Sessions logged' },
+    { value: summary?.topProjectName ?? '—', label: 'Top project' },
   ]
 
   return (
@@ -113,31 +111,26 @@ export default function HistogramSection({
         <div className="flex-1 flex items-end gap-1 md:gap-1.5 border-b border-[#26292F] pb-0 h-full">
           {loading
             ? Array.from({ length: SKELETON_BAR_COUNT }).map((_, i) => (
-                <div key={i} className="flex-1 flex flex-col items-center h-full justify-end" data-testid="histogram-bar">
-                  <div
-                    className="w-full rounded-t-sm md:rounded-t-md animate-pulse bg-[#26292F]"
-                    style={{ height: `${20 + Math.random() * 60}%` }}
-                  />
-                </div>
-              ))
-            : bars.map((bar, i) => (
+              <div key={i} className="flex-1 flex flex-col items-center h-full justify-end" data-testid="histogram-bar">
                 <div
-                  key={i}
-                  className="flex flex-col items-center h-full justify-end group relative min-w-0"
-                  data-testid="histogram-bar"
-                  style={{ flex: '1 1 0%' }}
-                >
-                  <div
-                    className="w-full rounded-t-sm md:rounded-t-md transition-all duration-300 hover:brightness-110"
-                    style={{
-                      height: `${(bar.totalSeconds / maxValue) * 100}%`,
-                      background: `linear-gradient(180deg, ${barColor} 0%, ${barColor}cc 100%)`,
-                      minHeight: bar.totalSeconds > 0 ? '4px' : '0',
-                    }}
-                  />
-                  <span className="absolute -bottom-6 text-[8px] md:text-[10px] font-medium text-slate-500 group-hover:text-slate-300 transition-colors truncate w-full text-center">{bar.label}</span>
-                </div>
-              ))
+                  className="w-full rounded-t-sm md:rounded-t-md animate-pulse bg-[#26292F]"
+                  style={{ height: `${20 + Math.random() * 60}%` }}
+                />
+              </div>
+            ))
+            : bars.map((bar, i) => (
+              <div key={i} className="flex-1 flex flex-col items-center h-full justify-end group relative" data-testid="histogram-bar">
+                <div
+                  className="w-full rounded-t-sm md:rounded-t-md transition-all duration-300 hover:brightness-110"
+                  style={{
+                    height: `${(bar.totalSeconds / maxValue) * 100}%`,
+                    background: `linear-gradient(180deg, ${barColor} 0%, ${barColor}cc 100%)`,
+                    minHeight: bar.totalSeconds > 0 ? '4px' : '0',
+                  }}
+                />
+                <span className="absolute -bottom-6 text-[8px] md:text-[10px] font-medium text-slate-500 group-hover:text-slate-300 transition-colors">{bar.label}</span>
+              </div>
+            ))
           }
         </div>
       </div>
