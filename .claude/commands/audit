@@ -1,0 +1,82 @@
+# Commitr — Project Audit Command
+# Usage: run this prompt at the start or end of any sprint
+# Purpose: verify CHANGELOG.md reflects actual codebase state
+
+---
+
+You are auditing the Commitr project codebase against its CHANGELOG.md.
+Read both carefully before producing any output.
+
+## Step 1 — Read the following files in order
+1. `CLAUDE.md` — architecture rules and conventions
+2. `CHANGELOG.md` — claimed current state, backlog, and roadmap
+3. `src/services/` — all service files
+4. `src/hooks/` — all hook files
+5. `src/components/` — all component files (scan, do not read every line)
+6. `src/context/` — all context files
+7. `src/lib/` — all lib files
+8. `src/types/index.ts` — type definitions
+9. `supabase/` — any SQL schema files present
+
+## Step 2 — Produce the audit report
+
+Output a structured report with the following sections:
+
+### ✅ Verified — shipped and matches CHANGELOG
+List every feature claimed as shipped that you can confirm exists in the codebase.
+One line per item. Be specific (file name, not just feature name).
+
+### ⚠️ Mismatch — claimed as shipped but incomplete or missing
+List every feature in the "Shipped" section of CHANGELOG that is:
+- Missing entirely from the codebase
+- Partially implemented (stub, placeholder, or TODO remaining)
+- Implemented differently than described
+For each: state what CHANGELOG claims, what the code actually shows.
+
+### 🐛 Known issues — confirm or refute
+For each item in the "Known issues" section of CHANGELOG:
+- Confirm it still exists in the code
+- Or mark it as already fixed if the code no longer shows the issue
+
+### 🔍 Undocumented — exists in code but not in CHANGELOG
+List any meaningful implementation found in the codebase that is not
+mentioned in CHANGELOG. Ignore test files and trivial helpers.
+
+### 📋 Backlog accuracy
+Review the "Current Backlog" section. For each item:
+- Still valid: issue or debt still present in code
+- Resolved: no longer present, should be removed from backlog
+- New: any additional technical debt spotted during the audit
+
+### 🗂️ CHANGELOG edits needed
+Produce a ready-to-apply list of changes to make CHANGELOG.md accurate:
+- Lines or sections to remove (no longer accurate)
+- Lines or sections to update (partially accurate)
+- New entries to add (missing from changelog)
+
+Format each edit as:
+```
+ACTION: [REMOVE | UPDATE | ADD]
+SECTION: [section name in CHANGELOG]
+CURRENT: [current text, if UPDATE or REMOVE]
+PROPOSED: [new text, if UPDATE or ADD]
+```
+
+## Step 3 — Sprint readiness check
+
+If this audit is run BEFORE a sprint, answer:
+- Is the codebase in a stable state to begin the next sprint?
+- Are there any blocking issues that should be resolved first?
+- Does the CHANGELOG accurately reflect what the next sprint builds on top of?
+
+If this audit is run AFTER a sprint, answer:
+- Were all sprint deliverables implemented?
+- What was not completed and should carry over to the next sprint?
+- Is CHANGELOG.md ready to be committed as accurate project history?
+
+## Rules
+- Do not make any code changes during the audit
+- Do not suggest refactors or improvements — only verify accuracy
+- Do not skip files — if a file cannot be read, note it explicitly
+- Be specific: reference file names and line-level evidence where possible
+- Keep the report factual and concise — no padding
